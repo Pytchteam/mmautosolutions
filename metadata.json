@@ -1,0 +1,7 @@
+{
+  "name": "M&M Auto Solutions | M² Solutions",
+  "description": "Premium automotive service and asset-backed financing platform in Jamaica. Access essential auto services now. Pay in structured monthly plans.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

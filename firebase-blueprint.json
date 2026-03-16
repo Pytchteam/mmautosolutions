@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "Vehicle": {
+      "title": "Vehicle",
+      "description": "A vehicle available in the marketplace",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Make and model of the vehicle" },
+        "price": { "type": "number", "description": "Total asset value in JMD" },
+        "image": { "type": "string", "description": "URL to the vehicle image" },
+        "specs": { "type": "array", "items": { "type": "string" }, "description": "Key features or specifications" },
+        "available": { "type": "boolean", "description": "Whether the vehicle is currently in stock" },
+        "category": { "type": "string", "description": "Vehicle type (SUV, Sedan, etc.)" },
+        "brand": { "type": "string", "description": "Manufacturer name" },
+        "year": { "type": "number", "description": "Manufacturing year" },
+        "mileage": { "type": "number", "description": "Current mileage" },
+        "engine": { "type": "string", "description": "Engine type/size" },
+        "transmission": { "type": "string", "description": "Automatic or Manual" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "price", "image", "available", "category", "brand"]
+    },
+    "Part": {
+      "title": "Part",
+      "description": "An auto part or accessory available in the marketplace",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Name of the part" },
+        "price": { "type": "number", "description": "Price in JMD" },
+        "image": { "type": "string", "description": "URL to the part image" },
+        "specs": { "type": "array", "items": { "type": "string" }, "description": "Specifications or compatibility" },
+        "available": { "type": "boolean", "description": "Whether the part is in stock" },
+        "category": { "type": "string", "description": "Part category (Brakes, Engine, Tyres, etc.)" },
+        "stockLevel": { "type": "number", "description": "Current quantity in stock" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "price", "image", "available", "category"]
+    },
+    "FinancingApplication": {
+      "title": "Financing Application",
+      "description": "A customer request for asset-backed financing",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the applicant" },
+        "assetId": { "type": "string", "description": "ID of the vehicle or part being financed" },
+        "assetType": { "type": "string", "enum": ["car", "part"], "description": "Type of asset" },
+        "fullName": { "type": "string", "description": "Full name of the applicant" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "incomeBand": { "type": "string" },
+        "employmentType": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "reviewing", "approved", "declined"], "description": "Current status of the application" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "assetId", "assetType", "fullName", "email", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/vehicles": {
+      "schema": "Vehicle",
+      "description": "Collection of vehicles for sale"
+    },
+    "/parts": {
+      "schema": "Part",
+      "description": "Collection of auto parts and accessories"
+    },
+    "/applications": {
+      "schema": "FinancingApplication",
+      "description": "Customer financing applications"
+    }
+  }
+}

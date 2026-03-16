@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-gold: #D4AF37;
+  --color-brand-gold-dark: #B8860B;
+  --color-brand-charcoal: #1A1A1A;
+  --color-brand-black: #0A0A0A;
+  --color-brand-white: #F5F5F5;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-black text-brand-white font-sans selection:bg-brand-gold selection:text-brand-black;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+}
+
+@utility gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+}
+
+@utility glass-nav {
+  @apply sticky top-0 z-50 bg-brand-black/80 backdrop-blur-xl border-b border-white/10;
+}
+
+@utility btn-primary {
+  @apply px-8 py-4 rounded-xl gold-gradient text-brand-black font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-lg shadow-brand-gold/20;
+}
+
+@utility btn-secondary {
+  @apply px-8 py-4 rounded-xl border border-brand-gold/50 text-brand-gold font-bold transition-all hover:bg-brand-gold/10 active:scale-95 disabled:opacity-50;
+}
+
+@utility card-premium {
+  @apply bg-brand-charcoal/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-brand-gold/40 transition-all duration-500 hover:shadow-2xl hover:shadow-brand-gold/5;
+}
+
+@utility skeleton {
+  @apply animate-pulse bg-white/5 rounded-lg;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-brand-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-gold);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.mask-fade-bottom {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}

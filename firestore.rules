@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' || 
+         (request.auth.token.email == "team@pytchmarketing.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidVehicle(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() < 100 &&
+             data.price is number && data.price > 0 &&
+             data.image is string &&
+             data.available is bool &&
+             data.category is string &&
+             data.brand is string;
+    }
+
+    function isValidPart(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() < 100 &&
+             data.price is number && data.price > 0 &&
+             data.image is string &&
+             data.available is bool &&
+             data.category is string;
+    }
+
+    function isValidApplication(data) {
+      return data.userId == request.auth.uid &&
+             data.fullName is string && data.fullName.size() > 0 &&
+             data.email is string &&
+             data.status in ['pending', 'reviewing', 'approved', 'declined'];
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    // Publicly readable inventory, admin only writes
+    match /vehicles/{vehicleId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidVehicle(request.resource.data);
+    }
+
+    match /parts/{partId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidPart(request.resource.data);
+    }
+
+    // Applications: Users can create and read their own. Admins can do everything.
+    match /applications/{applicationId} {
+      allow create: if isAuthenticated() && isValidApplication(request.resource.data) && request.resource.data.status == 'pending';
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if isAdmin();
+      allow create: if isAuthenticated() && isOwner(userId) && request.resource.data.role == 'user';
+    }
+  }
+}
